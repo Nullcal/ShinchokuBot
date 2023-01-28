@@ -41,7 +41,7 @@ function splitEmoji(emo) {
 }
 
 // トークン用意
-const token = "MTA0OTE3MzYzNDE0MjQ0OTcxNA.G2vqMD.NSGHxiIaDz0-FnqX-xtLx1uxdD3OhRzkS6U9LE";
+const token = "TOKEN";
 
 // 起動時の処理
 client.on("ready", client => {
@@ -169,6 +169,8 @@ client.on("messageReactionAdd", (reacts, user) => {
   // メッセージを削除
   reacts.message.delete();
 })
+
+// チルノたん
 
 // Discord へ接続
 client.login(token);
