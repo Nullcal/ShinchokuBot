@@ -1,11 +1,20 @@
 // 絵文字分割用のライブラリ
 const runes = require("runes");
 
+// 削除キー等保存用ライブラリ
+const Database = require("somewhere");
+const db = new Database("./database.json");
+
+// データベースから削除キー取得
+function getDeleteKey() {
+  return db.find("deleteKey")[0].emo; //"<:arrow_circuit:1049529634510864445>";
+}
+
+//db.save("deleteKey", {emo: "<:arrow_circuit:1049529634510864445>"});
+
 // Discord.js モジュールのインポート
 const Discord = require("discord.js");
-
 const BotId = "1049173634142449714";
-const DeleteKey = "<:arrow_circuit:1049529634510864445>";
 
 // Discord Client のインスタンス作成
 const { Client, GatewayIntentBits, Partials, SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js')
@@ -41,7 +50,7 @@ function splitEmoji(emo) {
 }
 
 // トークン用意
-const token = "TOKEN";
+const token = "CIRNO-LOVE";
 
 // 起動時の処理
 client.on("ready", client => {
@@ -64,7 +73,18 @@ client.on("ready", client => {
           "required": true
         }
       ],
-    },
+    },{
+      name: "delkey",
+      description: "Set delete key for bot messages.",
+      options: [
+        {
+          "type": 3,
+          "name": "key",
+          "description": "Enter an emoji to be the delete key.",
+          "required": false
+        }
+      ],
+    }
   ];
   client.application.commands.set(data, "1049173317711568998");
 
@@ -82,7 +102,7 @@ function deletableReply(interaction, content) {
 
     // 送ったメッセージにリアクション
     interaction.channel.messages.fetch({ limit:1 })
-      .then(m => m.map(e => e.react(DeleteKey))
+      .then(m => m.map(e => e.react(getDeleteKey()))
     );
 
   });
@@ -98,7 +118,28 @@ client.on("interactionCreate", (interaction) => {
 
   // ヘルプを表示
   if(interaction.commandName === "help") {
-    deletableReply(interaction, `Now delete key is setting to ${DeleteKey}.（＞＜ ）`);
+    deletableReply(interaction, `ここには何もないようだ...`);
+  }
+
+  // 削除キーを設定
+  if(interaction.commandName === "delkey") {
+
+    // 引数を抽出
+    let arguments = interaction.options._hoistedOptions;
+    let content = "";
+
+    if (arguments[0]) {
+      // 設定
+      const target = splitEmoji(arguments[0].value);
+      console.log(target);
+      content = `${target[0]}`;
+
+    } else {
+      // database.jsonから削除キー取得
+      content = `Now delete key is setting to ${getDeleteKey()}.（＞＜ ）`;
+
+    }
+    deletableReply(interaction, content);
   }
 
   // 未読を表示
@@ -162,15 +203,13 @@ client.on("messageReactionAdd", (reacts, user) => {
   // BOTがリアクションした場合スルー
   if (user.bot) return;
   // ばつ以外のリアクションはスルー
-  if (reacts._emoji.name !== splitEmoji(DeleteKey)[0].name) return;
+  if (reacts._emoji.name !== splitEmoji(getDeleteKey())[0].name) return;
   // メッセージの送り主がこのBOT以外の場合スルー
   if (reacts.message.author.id !== BotId) return;
 
   // メッセージを削除
   reacts.message.delete();
 })
-
-// チルノたん
 
 // Discord へ接続
 client.login(token);
