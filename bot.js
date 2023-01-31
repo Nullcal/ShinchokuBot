@@ -10,7 +10,10 @@ function getDeleteKey() {
   return db.find("deleteKey")[0].emo; //"<:arrow_circuit:1049529634510864445>";
 }
 
-//db.save("deleteKey", {emo: "<:arrow_circuit:1049529634510864445>"});
+// データベース初期化
+function resetPreferences() {
+  db.save("deleteKey", {emo: "<:arrow_circuit:1049529634510864445>"});
+}
 
 // Discord.js モジュールのインポート
 const Discord = require("discord.js");
@@ -50,7 +53,7 @@ function splitEmoji(emo) {
 }
 
 // トークン用意
-const token = "CIRNO-LOVE";
+const token = "";
 
 // 起動時の処理
 client.on("ready", client => {
@@ -130,15 +133,19 @@ client.on("interactionCreate", (interaction) => {
 
     if (arguments[0]) {
       // 設定
-      const target = splitEmoji(arguments[0].value);
-      console.log(target);
-      content = `${target[0]}`;
+      const target = splitEmoji(arguments[0].value[0]);
+      content = `Set delete key to ${target.emo}`;
+
+      // データベース書き込み
+      db.save("deleteKey", target);
 
     } else {
       // database.jsonから削除キー取得
       content = `Now delete key is setting to ${getDeleteKey()}.（＞＜ ）`;
 
     }
+
+    // 返信送信
     deletableReply(interaction, content);
   }
 
