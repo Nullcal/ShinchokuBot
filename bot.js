@@ -53,7 +53,7 @@ function splitEmoji(emo) {
 }
 
 // トークン用意
-const token = "MTA0OTE3MzYzNDE0MjQ0OTcxNA.GBHw1t.j8q21Xoue0P6Rb6Kv5C_UciiQkhPtjzrT-N9dM";
+const token = "TOKEN_HERE";
 
 // 起動時の処理
 client.on("ready", client => {
