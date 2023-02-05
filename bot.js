@@ -1,3 +1,6 @@
+// トークン取得
+const token = require("./data/token.json");
+
 // 絵文字分割用のライブラリ
 const runes = require("runes");
 
@@ -51,9 +54,6 @@ function splitEmoji(emo) {
       }
     );
 }
-
-// トークン用意
-const token = "TOKEN_HERE";
 
 // 起動時の処理
 client.on("ready", client => {
@@ -219,4 +219,4 @@ client.on("messageReactionAdd", (reacts, user) => {
 })
 
 // Discord へ接続
-client.login(token);
+client.login(token.token);
