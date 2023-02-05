@@ -1,5 +1,5 @@
 // トークン取得
-const token = require("./data/token.json");
+const {clientId, guildId, token} = require("./config.json");
 
 // 絵文字分割用のライブラリ
 const runes = require("runes");
@@ -219,4 +219,4 @@ client.on("messageReactionAdd", (reacts, user) => {
 })
 
 // Discord へ接続！
-client.login(token.token);
+client.login(token);
