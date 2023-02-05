@@ -218,5 +218,5 @@ client.on("messageReactionAdd", (reacts, user) => {
   reacts.message.delete();
 })
 
-// Discord へ接続
+// Discord へ接続！
 client.login(token.token);
