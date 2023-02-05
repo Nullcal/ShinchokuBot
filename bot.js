@@ -1,5 +1,6 @@
 // トークン取得
-const {clientId, guildId, token} = require("./config.json");
+const { clientId, guildId, token } = require("./config.json");
+const { REST } = require("@discordjs/rest");
 
 // 絵文字分割用のライブラリ
 const runes = require("runes");
@@ -7,6 +8,9 @@ const runes = require("runes");
 // 削除キー等保存用ライブラリ
 const Database = require("somewhere");
 const db = new Database("./database.json");
+
+// Discord.js API呼び出し？
+const rest = new REST({ version: "10" }).setToken(token);
 
 // データベースから削除キー取得
 function getDeleteKey() {
